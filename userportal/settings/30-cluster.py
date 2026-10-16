@@ -18,38 +18,26 @@ EXPORTER_SAMPLING_RATE = {
     'libvirtd_exporter': 30,
 }
 
-CLUSTER_NAME = 'narval'  # used for slurm stats
-STORAGE_NAME = 'narval-storage'
-COMPUTE_NAME = 'narval'  # narval-compute or narval-gpu
-LUSTRE_FS_NAMES = ['lustre05', 'lustre06', 'lustre07']
+CLUSTER_NAME = 'rocky'  # used for slurm stats
+STORAGE_NAME = 'rocky-storage'
+COMPUTE_NAME = 'rocky'  # narval-compute or narval-gpu
+LUSTRE_FS_NAMES = []  # Rocky uses CephFS, not Lustre
 LOGINS = {
-    'narval1': {
-        'network_interface': 'eno34',
+    'rocky1': {
+        'network_interface': 'enp1s0',
     },
-    'narval2': {
-        'network_interface': 'eno34',
-    },
-    'narval3': {
-        'network_interface': 'eno34',
+    'rocky2': {
+        'network_interface': 'enp1s0',
     },
 }
 DTNS = {
-    'narval-dtn1': {
-        'network_interface': 'bond0',
-    },
-    'narval-dtn2': {
-        'network_interface': 'bond0',
-    },
-    'narval-dtn3': {
-        'network_interface': 'bond0',
-    },
-    'narval-dtn4': {
-        'network_interface': 'bond0',
+    'rocky-dtn': {
+        'network_interface': 'enp1s0',
     },
 }
 
 # out-of-band suffix to append to the hostname
-HOSTNAME_OOB_SUFFIX = '-oob'
+HOSTNAME_OOB_SUFFIX = '' #'-oob'
 
 # append a domain the hostname (including leading dot)
 HOSTNAME_DOMAIN = ''
@@ -72,38 +60,53 @@ CLOUD_CPU_CORE_COST_PER_HOUR = 2.448 / 64 * CURRENCY_CONVERSION  # c6a.16xlarge 
 CLOUD_GPU_COST_PER_HOUR = 5.672 / 4 * CURRENCY_CONVERSION  # g5.12xlarge = 48 cores, 4 GPUs, 192GB of ram, less than half the memory of Narval
 
 # Used to set reasonable thresholds for the mem usage in the "top compute" page
-NORMAL_MEM_BY_CORE = 256/64 * 1024 * 1024 * 1024  # 256GB for 64 cores
-NORMAL_MEM_BY_GPU = 512 / 4 * 1024 * 1024 * 1024  # 512GB for 4 GPUs
-NORMAL_CORES_BY_GPU = 48 / 4  # 48 cores for 4 GPUs
+NORMAL_MEM_BY_CORE = 2048/112 * 1024 * 1024 * 1024  # ~18.3 GB per core
+NORMAL_MEM_BY_GPU = 2048 / 8 * 1024 * 1024 * 1024  # 258GB host RAM per GPU
+NORMAL_CORES_BY_GPU = 112 / 8  # 14 cores per GPU
 
 # Used to find the current quotas in prometheus
-QUOTA_TYPES = {
-    'home': ('/lustre05/home/', 'project'),
-    'scratch': ('/lustre07/scratch/', 'project'),
-    'project': ('/lustre06/project/', 'project'),
-}
+#QUOTA_TYPES = {
+#    'home': ('/lustre05/home/', 'project'),
+#    'scratch': ('/lustre07/scratch/', 'project'),
+#    'project': ('/lustre06/project/', 'project'),
+#}
 
 SLURM_TRES = {
-    '1001=': 'NVIDIA A100-SXM4-40GB',
+    '208=': 'NVIDIA H200 SXM 141GB',
 }
 
-CLUSTER_NAME_TITLE = 'Narval'
-FAVICON = 'https://object-arbutus.cloud.computecanada.ca/userportal-public/narval.png'
+CLUSTER_NAME_TITLE = 'Rocky'
+
+FAVICON = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%E2%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E'
+
+#FAVICON = 'https://www.amii.ca/favicon.ico' #'https://object-arbutus.cloud.computecanada.ca/userportal-public/narval.png'
 
 CLUSTER_INTRO = """
-<p>Narval is a general purpose cluster designed for a variety of workloads; it is located at the <a href="https://www.etsmtl.ca/en/home">École de technologie supérieure in Montreal</a> and is managed by <a href="https://www.calculquebec.ca/">Calcul Québec</a>. The cluster is named in honour of the <a href="https://en.wikipedia.org/wiki/Narwhal">narwhal</a>, a species of whale which has occasionally been observed in the Gulf of St. Lawrence.</p>
+<p>Rocky is Amii's HPC cluster, operated by the <a href="https://www.amii.ca/">Alberta Machine Intelligence Institute</a> and onboarded to the <a href="https://alliancecan.ca/">Digital Research Alliance of Canada</a>. The cluster is hosted at <a href="https://www.denvrdata.com/">Denvr Data Center</a> (Equinix CL03 in Calgary) and is named for the Rocky Mountains.</p>
 
-<p>This cluster is composed of over 80720 cores and 636 GPUs, all nodes are connected at 100Gb/s.</p>
+<p>This portal is intended for our users; the menu on the left provides tools to measure job performance and current cluster utilization.</p>
 
-<p>This portal is intended for our users, the menu on the left provides multiple tools to measure job performance and current cluster utilization</p>
-
-<p><a href="https://docs.computecanada.ca/wiki/Narval/">Documentation</a></p>
+<p><a href="https://docs.alliancecan.ca/wiki/Rocky">Documentation</a></p>
 """
 
-CLOUD_ALLOCATIONS_FILE = '/var/www/userportal/projects-rac2022.yml'
+CLOUD_ALLOCATIONS_FILE = None #'/var/www/userportal/projects-rac2022.yml'
 
 # Links in the menu
-EXTERNAL_LINKS = []
+EXTERNAL_LINKS = [
+    {'name': 'Documentation', 'url': 'https://docs.alliancecan.ca/wiki/Rocky', 'icon': 'book'},
+    {'name': 'Globus', 'url': 'https://app.globus.org/file-manager?origin_id=eae9df97-574e-40fa-9e32-015f01dd841e', 'icon': 'globe'},
+    {'name': 'Open OnDemand', 'url': 'https://rocky.alliancecan.ca', 'icon': 'terminal'},
+]
+
+# Links to other portals, under external links.
+# The path parameter enable compatibility with other portals by sending the user to the same page in the other portal
+OTHER_PORTALS = [
+    {'name': 'Vulcan', 'url': 'https://metrix.vulcan.alliancecan.ca/', 'path': True},
+    {'name': 'TamIA', 'url': 'https://portail.tamia.ecpia.ca/', 'path': True},
+]
+
+
+#EXTERNAL_LINKS = []
 #EXTERNAL_LINKS = [
 #    {'name': 'Documentation', 'url': 'https://docs.alliancecan.ca/wiki/Narval', 'icon': 'book'},
 #    {'name': 'Globus', 'url': 'https://app.globus.org/file-manager?origin_id=a1713da6-098f-40e6-b3aa-034efe8b6e5b', 'icon': 'globe'},
@@ -112,7 +115,7 @@ EXTERNAL_LINKS = []
 
 # Links to other portals, under external links. 
 # The path parameter enable compatibility with other portals by sending the user to the same page in the other portal
-OTHER_PORTALS = []
+#OTHER_PORTALS = []
 #OTHER_PORTALS = [
 #    {'name': 'Beluga', 'url': 'https://portail.beluga.calculquebec.ca', 'path': True},
 #    {'name': 'Graham', 'url': 'https://dashboard.graham.sharcnet.ca', 'path': True},

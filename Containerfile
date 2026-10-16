@@ -13,6 +13,9 @@ RUN python3 -m venv /opt/userportal-env && \
     /opt/userportal-env/bin/pip install --upgrade pip && \
     /opt/userportal-env/bin/pip install --no-cache-dir -r requirements.txt
 
+# Rocky uses Postgres (TBT upstream expects MySQL); add psycopg2 driver.
+RUN /opt/userportal-env/bin/pip install --no-cache-dir psycopg2-binary
+
 COPY . .
 
 RUN patch /opt/userportal-env/lib/python3.12/site-packages/ldapdb/backends/ldap/base.py < /opt/userportal/ldapdb.patch
